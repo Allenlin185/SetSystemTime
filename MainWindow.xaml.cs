@@ -11,19 +11,12 @@ using System.Windows.Media;
 
 namespace SetSystemTime
 {
-    /// <summary>
-    /// MainWindow.xaml 的互動邏輯
-    /// </summary>
     public partial class MainWindow : Window
     {
         private string APIToken = "";
         private ValidatorExtensions Validator = new ValidatorExtensions();
-        private SolidColorBrush Success = new SolidColorBrush(Color.FromRgb(162, 255, 0));
-        private SolidColorBrush Waiting = new SolidColorBrush(Color.FromRgb(255, 165, 0));
         private SolidColorBrush Danger = new SolidColorBrush(Color.FromRgb(255, 0, 0));
-        private SolidColorBrush White = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         private SolidColorBrush Gray = new SolidColorBrush(Color.FromRgb(171, 173, 179));
-        private SolidColorBrush Transparent = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern bool SetLocalTime(ref SystemTime sysTime);
         public struct SystemTime
@@ -176,34 +169,12 @@ namespace SetSystemTime
         {
             if (APIToken != "")
             {
-                //JObject jObject;
                 HttpClient Client = new HttpClient();
                 Client.BaseAddress = new Uri(WebServer.Text);
                 Client.DefaultRequestHeaders.Accept.Clear();
                 Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", APIToken);
                 HttpResponseMessage ResponseMessage = Client.PostAsync("api/logout", null).Result;
-                /*
-                string responseJson = ResponseMessage.Content.ReadAsStringAsync().Result;
-                jObject = JObject.Parse(responseJson);
-                if ((bool)jObject["success"])
-                {
-                    string ServerTime = jObject["message"].ToString();
-                    Message.Text = ServerTime;
-
-                    if (!SetLocalTimeByStr(ServerTime))
-                    {
-
-                        Message.Text = "Set system time fail.";
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
-                    }
-
-                }
-                else
-                {
-                    Message.Text = "Get system time fail";
-                }
-                */
             }
             Environment.Exit(0);
         }
